@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Галактика Русского языка — подготовка к ВПР, ОГЭ, ЕГЭ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0e27;
+            color: #f0f4fa;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* НЕБУЛА - ОТДЕЛЬНЫЙ СЛОЙ (усилен) */
+        .nebula-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(184, 124, 247, 0.6) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 70%, rgba(64, 224, 208, 0.5) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 50%, rgba(100, 80, 180, 0.4) 0%, transparent 65%);
+            animation: nebulaPulse 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes nebulaPulse {
+            0% { opacity: 0.5; transform: scale(1) translate(0, 0); filter: brightness(0.9); }
+            50% { opacity: 0.8; transform: scale(1.03) translate(-1%, 1%); filter: brightness(1.1); }
+            100% { opacity: 0.6; transform: scale(1.01) translate(1%, -1%); filter: brightness(1); }
+        }
+
+        /* ДОПОЛНИТЕЛЬНОЕ СВЕЧЕНИЕ (ещё слой) */
+        .nebula-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(184, 124, 247, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 70% 60%, rgba(64, 224, 208, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 40%);
+            animation: nebulaGlow 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes nebulaGlow {
+            0% { opacity: 0.4; filter: blur(2px); }
+            100% { opacity: 0.8; filter: blur(4px); }
+        }
+
+        /* КАНВАСЫ */
+        .stars-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        #rocket-canvas {
+            position: fixed;
+            left: 20px;
+            top: 0;
+            width: 190px;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 3;
+        }
+        #meteor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        #comet-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        #cursor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 5;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.8rem 1.2rem 5rem;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 8px #40e0d0, 0 0 20px #b87cf7, 0 0 40px #40e0d0;
+            animation: flicker 4s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { text-shadow: 0 0 8px #40e0d0, 0 0 18px #b87cf7, 0 0 30px #40e0d0; }
+            50% { text-shadow: 0 0 15px #7ff0e0, 0 0 40px #d4a5ff, 0 0 70px #40e0d0; }
+            100% { text-shadow: 0 0 8px #40e0d0, 0 0 30px #c2a0ff, 0 0 55px #7ff0e0; }
+        }
+
+        .card {
+            background: rgba(25, 15, 35, 0.85);
+            border: 1px solid rgba(64, 224, 208, 0.45);
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(64, 224, 208, 0.2);
+            padding: 2.2rem 2rem;
+            transition: transform 0.2s ease, box-shadow 0.3s, border-color 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .card:hover {
+            box-shadow: 0 25px 50px rgba(64, 224, 208, 0.4), 0 0 30px #b87cf7;
+            border-color: #7ff0e0;
+            transform: translateY(-5px);
+        }
+
+        /* УЛЬТРАМАРИНОВАЯ ПЛАШКА */
+        .ultramarine-card {
+            background: rgba(5, 15, 45, 0.7);
+            border: 2px solid #4a6cf7;
+            border-radius: 50px;
+            box-shadow: 0 20px 40px rgba(74, 108, 247, 0.5), 0 0 30px #4a6cf7;
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(3px);
+        }
+        .ultramarine-card:hover {
+            box-shadow: 0 25px 50px rgba(74, 108, 247, 0.7), 0 0 50px #6a8cff;
+            border-color: #8aacff;
+            transform: translateY(-5px) scale(1.01);
+        }
+        .ultramarine-card h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .ultramarine-card p {
+            font-size: 1.4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: #f0f4ff;
+            text-shadow: 0 0 8px #4a6cf7;
+            line-height: 1.6;
+        }
+
+        .gradient-text {
+            background: linear-gradient(145deg, #ffffff, #e6d0ff, #b87cf7, #40e0d0, #7ff0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-title {
+            font-size: clamp(1.8rem, 7vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 20px #40e0d0);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .hero-title .title-text {
+            background: linear-gradient(145deg, #ffffff, #e6d0ff, #b87cf7, #40e0d0, #7ff0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline;
+        }
+        .hero-title .emoji {
+            display: inline-block;
+            margin-right: 0.2rem;
+            filter: drop-shadow(0 0 10px #40e0d0);
+        }
+
+        .epigraph {
+            font-size: 2.0rem;
+            color: #f0e0ff;
+            border-left: 8px solid #b87cf7;
+            padding-left: 2rem;
+            margin: 2.5rem 0;
+            text-shadow: 0 0 12px #b87cf7, 0 0 25px #40e0d0;
+            font-weight: 400;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #40e0d0, #b87cf7);
+            border: none;
+            border-radius: 70px;
+            padding: 1.4rem 4rem;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            box-shadow: 0 15px 45px #40e0d0, 0 0 40px #b87cf7;
+            transition: all 0.25s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            margin: 2.5rem auto 0;
+            display: inline-block;
+            width: fit-content;
+        }
+        .btn-primary:hover {
+            transform: scale(1.07) translateY(-5px);
+            background: linear-gradient(145deg, #7ff0e0, #d4a5ff);
+            box-shadow: 0 25px 60px #40e0d0, 0 0 70px #b87cf7;
+        }
+
+        /* Новая кнопка для перехода к программам */
+        .btn-programs {
+            background: rgba(25, 15, 35, 0.9);
+            border: 2px solid #b87cf7;
+            border-radius: 60px;
+            padding: 0.8rem 3rem;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(184, 124, 247, 0.5), 0 0 15px #40e0d0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin: 2rem auto;
+            display: inline-block;
+            width: fit-content;
+            backdrop-filter: blur(5px);
+            /* text-transform: uppercase; */ /* ← закомментировали или удалите эту строку */
+            animation: btnPulse 3s infinite alternate;
+            line-height: 1.2; 
+        }
+
+           /* Увеличенный эмодзи внутри кнопки */
+        .btn-programs .emoji-large {
+            font-size: 2.4rem;
+            margin-right: 10px;
+            
+            display: inline-block;
+            filter: drop-shadow(0 0 8px #b87cf7);
+            position: relative;
+            top: 2.1px;
+        }
+
+        .btn-programs:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: rgba(45, 25, 65, 0.95);
+            box-shadow: 0 0 45px #b87cf7, 0 0 30px #40e0d0;
+            border-color: #40e0d0;
+        }
+        @keyframes btnPulse {
+            0% { box-shadow: 0 0 20px #b87cf7, 0 0 10px #40e0d0; }
+            100% { box-shadow: 0 0 40px #40e0d0, 0 0 25px #b87cf7; }
+        }
+
+        .grid-2, .grid-3 {
+            display: grid;
+            gap: 2.2rem;
+            margin: 3rem 0;
+        }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+        .schedule-item {
+            background: rgba(64, 224, 208, 0.2);
+            border-radius: 50px;
+            padding: 1.3rem 2rem;
+            border: 1.5px solid #b87cf7;
+            box-shadow: 0 0 28px #b87cf7;
+            font-weight: bold;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.25rem;
+        }
+
+        .price-badge {
+            background: linear-gradient(145deg, #b87cf7, #40e0d0);
+            color: #1a1025;
+            padding: 0.4rem 1.3rem;
+            border-radius: 60px;
+            font-weight: 800;
+            display: inline-block;
+            box-shadow: 0 0 25px #b87cf7;
+            font-size: 1.2rem;
+        }
+
+        .lavender-title {
+            color: #b87cf7;
+            font-size: 2.8rem;
+            margin: 2.5rem 0 1.5rem;
+            text-shadow: 0 0 15px #b87cf7;
+        }
+        .lavender-title small {
+            font-size: 1.8rem;
+            color: #d4a5ff;
+        }
+        .turquoise-title {
+            color: #40e0d0;
+            font-size: 2.8rem;
+            margin: 2.5rem 0 1.5rem;
+            text-shadow: 0 0 15px #40e0d0;
+        }
+
+        .gagarin-quote {
+            font-size: 1.6rem;
+            color: #ffffff;
+            background: rgba(45, 20, 70, 0.7);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin: 2.8rem 0;
+            border: 1px solid #b87cf7;
+            box-shadow: 0 0 35px #b87cf7;
+            text-align: center;
+            font-weight: 400;
+            backdrop-filter: blur(3px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            border-top: 1px dashed #b87cf7;
+            padding-top: 2.5rem;
+            font-size: 1.1rem;
+            color: #e6d0ff;
+        }
+
+        .number-badge {
+            display: inline-block;
+            background: linear-gradient(145deg, #b87cf7, #40e0d0);
+            color: #0a0e27;
+            font-weight: bold;
+            font-size: 1.4rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2.5rem;
+            margin-right: 0.8rem;
+            box-shadow: 0 0 15px #b87cf7;
+        }
+
+        .route-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .route-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            background: rgba(64, 224, 208, 0.1);
+            border-radius: 30px;
+            padding: 1.5rem 1rem;
+            border: 1px solid #40e0d0;
+        }
+        .route-step .big-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #b87cf7;
+            text-shadow: 0 0 20px #b87cf7;
+            line-height: 1;
+        }
+
+        .subtitle {
+            color: #b87cf7;
+            font-size: 1.8rem;
+            margin: 0 0 1.5rem 0;
+        }
+
+        /* Для одинаковой высоты карточек */
+        .program-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .program-card .card-content {
+            flex: 1;
+        }
+
+        /* Плашки-акценты */
+        .accent-banner {
+            font-size: 1.5rem;
+            background: rgba(64,224,208,0.2);
+            padding: 1rem;
+            border-radius: 60px;
+            text-align: center;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid #40e0d0;
+            box-shadow: 0 0 20px rgba(64,224,208,0.3);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Заголовок программы с эмодзи */
+        .program-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0 1rem 0;
+        }
+        .program-header h3 {
+            color: #40e0d0;
+            font-size: 2.2rem;
+            margin: 0;
+        }
+        .program-header .emoji-large {
+            font-size: 3rem;
+        }
+
+        /* ===== ЕДИНЫЕ СТИЛИ ДЛЯ ВСЕХ ПУНКТОВ ===== */
+        .vpr-list, .oge-list, .ege-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+
+        .vpr-list li, .oge-item, .ege-item {
+            background: rgba(64, 224, 208, 0.1);
+            border: 1px solid rgba(64, 224, 208, 0.3);
+            border-radius: 30px;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(64, 224, 208, 0.2);
+            
+            /* Единые отступы и размеры */
+            font-size: 1.3rem;
+            padding: 0.8rem 1.2rem;
+            margin: 0.5rem 0;
+            
+            /* Flex для эмодзи и текста */
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .vpr-list li:hover, .oge-item:hover, .ege-item:hover {
+            background: rgba(64, 224, 208, 0.15);
+            border-color: #40e0d0;
+            box-shadow: 0 0 25px rgba(64, 224, 208, 0.4);
+            transform: translateX(5px);
+        }
+
+        /* Эмодзи в пунктах - единый стиль */
+        .vpr-list li span:first-child,
+        .oge-item span:first-child,
+        .ege-item span:first-child,
+        .ege-list li span.emoji-plan {
+            flex-shrink: 0;
+            width: 30px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        /* Для карточек ЕГЭ */
+        .ege-card .subtitle {
+            text-align: center;
+            width: 100%;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .ege-card .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ege-card .ege-list {
+            width: 100%;
+            text-align: left;
+        }
+
+        /* Убираем старые дублирующие стили */
+        .vpr-list li::before {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .hero-title { font-size: 2rem; }
+            .btn-primary { font-size: 1.8rem; padding: 1.2rem 2.2rem; }
+            .btn-programs { font-size: 1.4rem; padding: 1rem 2rem; }
+            .card { padding: 1.7rem 1.2rem; }
+            .epigraph { font-size: 1.3rem; }
+            .lavender-title, .turquoise-title { font-size: 2.2rem; }
+            #rocket-canvas { width: 100px; left: 10px; }
+            .ultramarine-card { padding: 1.8rem 1.2rem; }
+            .ultramarine-card h2 { font-size: 1.8rem; }
+            .ultramarine-card p { font-size: 1.2rem; }
+            .route-step { min-width: 100px; }
+            .program-header h3 { font-size: 1.8rem; }
+            
+            /* Адаптив для пунктов */
+            .vpr-list li, .oge-item, .ege-item {
+                padding: 0.6rem 1rem;
+                font-size: 1.2rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- СЛОИ ТУМАННОСТИ -->
+    <div class="nebula-layer"></div>
+    <div class="nebula-glow"></div>
+
+    <!-- КАНВАСЫ ДЛЯ АНИМАЦИЙ -->
+    <canvas class="stars-canvas" id="starsCanvas"></canvas>
+    <canvas id="meteor-canvas"></canvas>
+    <canvas id="star-canvas"></canvas>
+    <canvas id="comet-canvas"></canvas>
+    <canvas id="rocket-canvas"></canvas>
+    <canvas id="cursor-canvas"></canvas>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="app-wrapper">
+        <header style="text-align: center; margin-bottom: 2.5rem;">
+            <div class="epigraph" style="font-size: 1.5rem; border-left: none; text-align: center; padding-left: 0;">
+                В центре внимания – Ваш успех!
+            </div>
+            <h1 class="hero-title">
+                <span class="emoji">🌌</span>
+                <span class="title-text">ГАЛАКТИКА РУССКОГО ЯЗЫКА:</span>
+                <br>
+                <span class="title-text">ПРИТЯЖЕНИЕ ЗНАНИЙ!</span>
+            </h1>
+            <p style="font-size: 1.6rem; max-width: 900px; margin: 0 auto; color: #e6d0ff;">
+    Мечтаете спокойно, без стресса, дрожи в коленях написать контрольную работу (ВПР) или сдать экзамен по русскому языку (ОГЭ, ЕГЭ), чтобы поступить в престижный вуз? Значит, этот курс для Вас!
+</p>
+        </header>
+
+        
+        <div class="gagarin-quote">
+            Как сказал когда-то первый космонавт Земли Ю.А. Гагарин, отправляясь в свой первый космический полёт: «Поехали!»
+        </div>
+
+        <!-- Новая кнопка для перехода к программам курса -->
+        <div style="text-align: center;">
+            <button class="btn-programs" onclick="document.getElementById('programs-section').scrollIntoView({behavior: 'smooth'});">
+                <span class="emoji-large">✨</span>Программы курса <span class="emoji-large">✨</span>
+            </button>
+        </div>
+
+        <!-- МАРШРУТ ПОЛЁТА / К ВЫСОКИМ БАЛЛАМ -->
+        <h2 class="lavender-title">🚀 Маршрут полёта <small>→ К высоким баллам</small></h2>
+        
+        <div class="route-steps">
+    <div class="route-step">
+        <div class="big-number">1</div>
+        <div style="font-size: 1.4rem; font-weight: bold; color: #40e0d0;">ВПР</div>
+        <div style="font-size: 1.2rem; line-height: 1.4;">уверенность и разборы</div>
+    </div>
+    <div class="route-step">
+        <div class="big-number">2</div>
+        <div style="font-size: 1.4rem; font-weight: bold; color: #b87cf7;">ОГЭ</div>
+        <div style="font-size: 1.2rem; line-height: 1.4;">теория + практика</div>
+    </div>
+    <div class="route-step">
+        <div class="big-number">3</div>
+        <div style="font-size: 1.4rem; font-weight: bold; color: #40e0d0;">ЕГЭ</div>
+        <div style="font-size: 1.2rem; line-height: 1.4;">тесты, сочинение - мониторинги</div>
+    </div>
+</div>
+
+        <!-- ФОРМАТ -->
+        <div class="card" style="margin: 3rem 0; text-align: center;">
+            <h2 style="color: #b87cf7; font-size: 2.4rem;">🚀 Формат</h2>
+            <p style="font-size: 1.6rem;">Маленькие группы, максимум 5 учеников</p>
+            <p style="font-size: 1.2rem;">Каждый получает внимание, обратную связь и поддержку на каждом этапе подготовки.</p>
+        </div>
+
+        <!-- ДЛЯ КОГО КУРС -->
+        <h2 class="turquoise-title">👩‍🚀 Маршруты по орбитам знаний</h2>
+        <div class="grid-3">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 0.5rem;">🌍</div>
+        <h3 style="color: #40e0d0; font-size: 1.7rem; margin-top: 0;">Первый полёт</h3>
+        <p style="font-size: 1.3rem; line-height: 1.5;">Учащиеся 5–8 классов<br>(подготовка к ВПР)</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 0.5rem;">🛸</div>
+        <h3 style="color: #b87cf7; font-size: 1.7rem; margin-top: 0;">Разбор полётов</h3>
+        <p style="font-size: 1.3rem; line-height: 1.5;">Выпускники основной школы — учащиеся 8–9 классов (подготовка к ОГЭ)</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 0.5rem;">✨</div>
+        <h3 style="color: #40e0d0; font-size: 1.7rem; margin-top: 0;">В открытый Космос</h3>
+        <p style="font-size: 1.3rem; line-height: 1.5;">Выпускники средней школы — учащиеся 10–11 классов (подготовка к ЕГЭ)</p>
+    </div>
+</div>
+
+        <!-- ПРОГРАММЫ КУРСА -->
+        <h2 id="programs-section" class="lavender-title">🪐 Программы курса</h2>
+        <p style="font-size: 1.4rem; margin-bottom: 2rem;">Маршруты по орбитам знаний. Каждая программа — как продуманный полёт: с чётким маршрутом, практикой, поддержкой и выходом на уверенный результат.</p>
+
+
+        <!-- ВПР - заголовок отдельно -->
+        <div class="program-header">
+            <span class="emoji-large">🛰️</span>
+            <h3 style="color: #40e0d0;">Первая космическая станция: ВПР</h3>
+        </div>
+        
+        <!-- СЕТКА ИЗ ДВУХ КАРТОЧЕК ДЛЯ ВПР (как у ЕГЭ) -->
+        <div class="grid-2" style="margin-top: 1rem; align-items: stretch;">
+            <!-- Левая карточка: Все виды разборов -->
+            <div class="card program-card" style="margin: 0;">
+                <div class="card-content">
+                    <h4 class="subtitle" style="color: #b87cf7; font-size: 1.5rem; margin-top: 0; text-align: center;">🔬 Все виды лингвистического анализа</h4>
+                    <ul class="vpr-list" style="list-style: none; padding: 0;">
+                        <li><span>🔊</span><span>фонетический разбор</span></li>
+                        <li><span>🧩</span><span>морфемный разбор</span></li>
+                        <li><span>📦</span><span>словообразовательный разбор</span></li>
+                        <li><span>📖</span><span>лексический разбор</span></li>
+                        <li><span>🏷️</span><span>морфологический разбор</span></li>
+                        <li><span>✏️</span><span>орфографический разбор</span></li>
+                        <li><span>🔗</span><span>синтаксический разбор</span></li>
+                        <li><span>🔖</span><span>пунктуационный разбор</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Правая карточка: Работа по демоверсиям -->
+            <div class="card program-card" style="margin: 0;">
+                <div class="card-content">
+                    <h4 class="subtitle" style="color: #b87cf7; font-size: 1.5rem; margin-top: 0; text-align: center;">📋 Работа по демоверсиям ВПР</h4>
+                    <ul class="vpr-list" style="list-style: none; padding: 0;">
+                        <li><span>5️⃣</span><span><strong>класс</strong> — адаптация и первые шаги</span></li>
+                        <li><span>6️⃣</span><span><strong>класс</strong> — закрепление навыков</span></li>
+                        <li><span>7️⃣</span><span><strong>класс</strong> — углубление знаний</span></li>
+                        <li><span>8️⃣</span><span><strong>класс</strong> — подготовка к экзамену</span></li>
+                        <li><span>🔟</span><span><strong>класс</strong> — повторение и систематизация</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Плашка для ВПР - БЕЗ ИЗМЕНЕНИЙ -->
+        <div style="max-width: 1260px; width: 100%;">
+            <div class="accent-banner" style="margin-top: 0;">
+                <strong>Уверенность при написании ВПР!</strong>
+            </div>
+        </div>
+
+        <!-- ОГЭ - заголовок отдельно -->
+        <div class="program-header" style="margin-top: 3rem;">
+            <span class="emoji-large">🌌</span>
+            <h3 style="color: #b87cf7;">Космодром: разбор полётов ОГЭ</h3>
+        </div>
+        
+        <!-- КАРТОЧКА ОГЭ - УВЕЛИЧЕНА ПО ШИРИНЕ -->
+        <div class="card program-card" style="margin: 0 0 1rem 0; max-width: 1260px;">
+            <div class="card-content">
+                <ul class="oge-list">
+                    <li class="oge-item"><span>🌌</span><span>«Звёздный путь»: к изложению на «отлично»</span></li>
+                    <li class="oge-item"><span>✨</span><span>«ОРФО созвездие»: «космические ловушки» орфографии</span></li>
+                    <li class="oge-item"><span>🛸</span><span>«Пункт 5.0»: синтаксис и пунктуация с космическими технологиями версии 5.0</span></li>
+                    <li class="oge-item"><span>🪐</span><span>«Лексические спутники»: о лексике и фразеологии просто</span></li>
+                    <li class="oge-item"><span>🚀</span><span>«Нормы поведения в лингвокосмосе»: грамматические нормы «великого и могучего»</span></li>
+                    <li class="oge-item"><span>🛰️</span><span>«Космическая станция №13»: текстоведение и «загадки» сочинения-рассуждения (задание 13)</span></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Плашка для ОГЭ - БЕЗ ИЗМЕНЕНИЙ -->
+        <div style="max-width: 1260px; width: 100%;">
+            <div class="accent-banner" style="margin-top: 0;">
+                <strong>Теория + практика = «ОТЛИЧНО» на ОГЭ</strong>
+            </div>
+        </div>
+
+
+        <!-- ЕГЭ - заголовок отдельно -->
+        <div class="program-header" style="margin-top: 3rem;">
+            <span class="emoji-large">✨</span>
+            <h3 style="color: #40e0d0;">Вселенная ЕГЭ, или На пути в открытый Космос</h3>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1rem; align-items: stretch;">
+            <!-- Левая карточка: Звездопад -->
+            <div class="card program-card ege-card">
+                <div class="card-content">
+                    <h4 class="subtitle" style="color: #b87cf7; font-size: 1.5rem; margin-top: 0; margin-bottom: 0.5rem; text-align: center;">🌟 Звездопад, или Как получить 26 «звёзд» в коллекцию знаний</h4>
+                    <ul class="ege-list" style="list-style: none; padding: 0;">
+                        <li class="ege-item"><span class="emoji-plan">🌠</span><span>№№ 1, 26: «гравитация текста» — логико-смысловые отношения между предложениями в тексте</span></li>
+                        <li class="ege-item"><span class="emoji-plan">🪐</span><span>№ 3: «мироздание» смысла, стилей и типов речи</span></li>
+                        <li class="ege-item"><span class="emoji-plan">☄️</span><span>№№ 4–8: «космические нормы» — орфоэпические, грамматические, лексические</span></li>
+                        <li class="ege-item"><span class="emoji-plan">✨</span><span>№№ 9–15: «Вселенная» орфографии</span></li>
+                        <li class="ege-item"><span class="emoji-plan">💫</span><span>№№ 16–21: «Космос» пунктуации</span></li>
+                        <li class="ege-item"><span class="emoji-plan">🛸</span><span>№ 22: «красноречивый Космос», или выразительные средства языка</span></li>
+                        <li class="ege-item"><span class="emoji-plan">👾</span><span>№№ 23, 24: "Вселенский Разум": информационно-смысловая переработка прочитанного текста, виды информации в тексте</span></li>
+                        <li class="ege-item"><span class="emoji-plan">🌙</span><span>№№ 2, 25: «загадки» лексического анализа слова</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Правая карточка: Гравитация текста -->
+            <div class="card program-card ege-card">
+                <div class="card-content">
+                    <h4 class="subtitle" style="color: #b87cf7; font-size: 1.5rem; margin-top: 0; margin-bottom: 0.5rem; text-align: center;">📝 «Гравитация текста», или «Тайны» экзаменационного сочинения</h4>
+                    <ul class="ege-list" style="list-style: none; padding: 0;">
+                        <li class="ege-item"><span class="emoji-plan">🚀</span><span>«Космос автора» — авторская позиция как ответ на проблемный вопрос в задании 27</span></li>
+                        <li class="ege-item"><span class="emoji-plan">🛰️</span><span>«Небеспорядочные связи во Вселенной текста» — как найти и прокомментировать смысловую связь</span></li>
+                        <li class="ege-item"><span class="emoji-plan">🪐</span><span>«Спутники»-иллюстрации — как найти и прокомментировать примеры-иллюстрации в задании 27</span></li>
+                        <li class="ege-item"><span class="emoji-plan">👩‍🚀</span><span>«Мой космос» — как обосновать собственное мнение по авторской позиции</span></li>
+                        <li class="ege-item"><span class="emoji-plan">📡</span><span>«Нормы поведения в лингвокосмосе» — как соблюсти нормы языка в сочинении: орфография + пунктуация + грамматика + речь + логика + этика + фактическая точность</span></li>
+                        <li class="ege-item"><span class="emoji-plan">✍️</span><span>Практические «полёты»: написание сочинений по экзаменационным критериям</span></li>
+                        <li class="ege-item"><span class="emoji-plan">🏆</span><span>«Высший пилотаж»: проверка сочинения по экзаменационным критериям</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>     
+
+        <!-- Дополнительная информация по ЕГЭ -->
+        <div class="accent-banner" style="margin-top: 2rem;">
+            «Орбиталь»: мониторинги знаний каждые два месяца.<br>Первый выход без стресса в открытый Космос Жизни!
+        </div>
+
+        <!-- ПОЧЕМУ КУРС ОСОБЕННЫЙ -->
+        <h2 class="turquoise-title">✨ Почему этот курс особенный?</h2>
+<div class="grid-3" style="margin-bottom: 3rem;">
+    <div class="card" style="text-align: center;">
+        <span style="font-size: 4rem;">🎯</span>
+        <h3 style="color: #40e0d0; font-size: 2rem;">01</h3>
+        <p style="font-size: 1.4rem; line-height: 1.5;">Акцент на практику</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <span style="font-size: 4rem;">📚</span>
+        <h3 style="color: #b87cf7; font-size: 2rem;">02</h3>
+        <p style="font-size: 1.4rem; line-height: 1.5;">Разбор тестов из открытого банка заданий (ОБЗ) ФИПИ</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <span style="font-size: 4rem;">🎮</span>
+        <h3 style="color: #40e0d0; font-size: 2rem;">03</h3>
+        <p style="font-size: 1.4rem; line-height: 1.5;">Теория и практика в интерактивном формате</p>
+    </div>
+</div>
+
+        <!-- ЧТО ПОТРЕБУЕТСЯ -->
+        <h2 class="lavender-title">🖥️ Готовность к старту</h2>
+<div class="card" style="margin: 2rem 0;">
+    <ul style="list-style-type: none; padding-left: 0;">
+        <li style="margin: 0.8rem 0; font-size: 1.3rem; line-height: 1.5;">• Стационарный компьютер или ноутбук с наушниками и микрофоном</li>
+        <li style="margin: 0.8rem 0; font-size: 1.3rem; line-height: 1.5;">• Стабильный интернет</li>
+    </ul>
+</div>
+
+        <!-- РАСПИСАНИЕ -->
+        <h2 class="turquoise-title">📅 Полётный график</h2>
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0;">
+            <div class="schedule-item">
+                <span>🚀 Понедельник, 17:30 (МСК) — группа подготовки к ВПР</span>
+            </div>
+            <div class="schedule-item">
+                <span>🛰️ Четверг, 18:00 (МСК) — группа подготовки к ОГЭ</span>
+            </div>
+            <div class="schedule-item">
+                <span>🌕 Пятница, 17:30 (МСК) — группа подготовки к ЕГЭ</span>
+            </div>
+        </div>
+
+        <!-- СТОИМОСТЬ -->
+        <h2 class="lavender-title">💰 Тарифы</h2>
+        <div class="grid-2" style="margin: 2rem 0;">
+    <div class="card" style="text-align: center;">
+        <h3 style="color: #40e0d0; font-size: 2.2rem;">Полный курс (абонемент)</h3>
+        <p style="font-size: 3rem; font-weight: bold; color: #b87cf7;">50 000 ₽</p>
+        <p style="font-size: 1.3rem; line-height: 1.5;">36 занятий с последовательной подготовкой и отработкой тем.</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h3 style="color: #b87cf7; font-size: 2.2rem;">Оплата за каждое занятие</h3>
+        <p style="font-size: 3rem; font-weight: bold; color: #40e0d0;">1 500 ₽</p>
+        <p style="font-size: 1.3rem; line-height: 1.5;">Стоимость 1 урока в удобном формате обучения.</p>
+    </div>
+</div>
+
+        <!-- НАБОР ОТКРЫТ -->
+        <section style="text-align: center; background: rgba(64,224,208,0.2); border-radius: 90px; padding: 3rem 2rem; border: 2px solid #b87cf7; margin: 3rem 0; backdrop-filter: blur(3px);">
+            <h2 style="font-size: 2.5rem; color: #ffffff; text-shadow: 0 0 20px #b87cf7;">✨ Летим уверенно к высоким результатам!</h2>
+            <p style="font-size: 1.7rem; margin: 1.5rem 0;">Группы маленькие — максимум 5 учеников, чтобы каждый получил внимание. Места ограничены!</p>
+            <p style="font-size: 1.6rem; margin: 2rem 0;">Запишитесь сейчас! Мы ждём Вас на борту нашего космического корабля знаний!</p>
+            
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin: 2rem 0;">
+                <span style="background: rgba(184, 124, 247, 0.3); padding: 0.8rem 1.5rem; border-radius: 50px;">📝 Подготовка к ВПР, ОГЭ и ЕГЭ</span>
+                <span style="background: rgba(64, 224, 208, 0.3); padding: 0.8rem 1.5rem; border-radius: 50px;">✨ Современный, спокойный и понятный формат</span>
+                <span style="background: rgba(184, 124, 247, 0.3); padding: 0.8rem 1.5rem; border-radius: 50px;">👥 Индивидуальное внимание в мини-группах</span>
+            </div>
+
+            <button class="btn-primary" onclick="alert('🚀 Запись на курс! Мы свяжемся с вами.')">ЗАПИСАТЬСЯ НА КУРС</button>
+        </section>
+
+        <footer>
+            <p>🌌 Галактика русского языка — притяжение знаний. Ждём вас на борту! <br> © репетитор по русскому языку</p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            // --- ЗВЁЗДЫ (мерцающие) ---
+            const starsCanvas = document.getElementById('starsCanvas');
+            const starsCtx = starsCanvas.getContext('2d');
+            let width, height;
+            let stars = [];
+            let animationFrameId;
+
+            function initStars(starCount = 250) {
+                stars = [];
+                for (let i = 0; i < starCount; i++) {
+                    stars.push({
+                        x: Math.random(),
+                        y: Math.random(),
+                        radius: Math.random() * 2.5 + 0.8,
+                        baseAlpha: Math.random() * 0.7 + 0.2,
+                        speed: 0.0005 + Math.random() * 0.01,
+                        phase: Math.random() * 2 * Math.PI,
+                        hue: Math.random() > 0.6 ? 280 : (Math.random() > 0.5 ? 180 : 60),
+                    });
+                }
+            }
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                starsCanvas.width = width;
+                starsCanvas.height = height;
+            }
+
+            function drawStars(timestamp) {
+                if (!starsCtx) return;
+                starsCtx.clearRect(0, 0, width, height);
+                const time = timestamp * 0.001;
+                stars.forEach(s => {
+                    const alpha = s.baseAlpha + 0.3 * Math.sin(time * 2 * s.speed + s.phase);
+                    starsCtx.beginPath();
+                    starsCtx.arc(s.x * width, s.y * height, s.radius, 0, 2 * Math.PI);
+                    starsCtx.fillStyle = `hsla(${s.hue}, 80%, 75%, ${Math.max(0.15, alpha)})`;
+                    starsCtx.shadowColor = s.hue === 280 ? '#b87cf7' : (s.hue === 180 ? '#40e0d0' : '#ffd700');
+                    starsCtx.shadowBlur = 10;
+                    starsCtx.fill();
+                });
+                animationFrameId = requestAnimationFrame(drawStars);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            initStars(250);
+            animationFrameId = requestAnimationFrame(drawStars);
+
+            // --- РАКЕТА ---
+            const rocketCanvas = document.getElementById('rocket-canvas');
+            const rocketCtx = rocketCanvas.getContext('2d');
+            let rocketY;
+
+            function resizeRocketCanvas() {
+                rocketCanvas.width = 180;
+                rocketCanvas.height = window.innerHeight;
+                rocketY = rocketCanvas.height + 50;
+            }
+
+            function drawRocket() {
+                rocketCtx.clearRect(0, 0, rocketCanvas.width, rocketCanvas.height);
+                const x = rocketCanvas.width / 2;
+                const y = rocketY;
+                const flamePulse = Math.sin(Date.now() * 0.01) * 5;
+
+                // ПЛАМЯ
+                const flameGradient = rocketCtx.createLinearGradient(x - 16, y + 70, x + 16, y + 120 + flamePulse);
+                flameGradient.addColorStop(0, '#FFD700');
+                flameGradient.addColorStop(0.4, '#FF4500');
+                flameGradient.addColorStop(1, '#8B0000');
+
+                for (let i = 0; i < 3; i++) {
+                    const offset = i * 9 - 9;
+                    rocketCtx.beginPath();
+                    rocketCtx.moveTo(x - 11 + offset, y + 70);
+                    rocketCtx.lineTo(x + offset, y + 110 + Math.sin(Date.now() * 0.01 + i) * 12 + flamePulse * 0.5);
+                    rocketCtx.lineTo(x + 11 + offset, y + 70);
+                    rocketCtx.closePath();
+                    rocketCtx.fillStyle = flameGradient;
+                    rocketCtx.shadowColor = '#FF4500';
+                    rocketCtx.shadowBlur = 28;
+                    rocketCtx.fill();
+                }
+
+                // КОРПУС
+                const metalGradient = rocketCtx.createLinearGradient(x - 28, y, x + 28, y + 100);
+                metalGradient.addColorStop(0, '#E8E8E8');
+                metalGradient.addColorStop(0.3, '#C0C0C0');
+                metalGradient.addColorStop(0.7, '#A0A0A0');
+                metalGradient.addColorStop(1, '#D0D0D0');
+
+                rocketCtx.shadowColor = '#40e0d0';
+                rocketCtx.shadowBlur = 22;
+
+                rocketCtx.beginPath();
+                rocketCtx.moveTo(x - 25, y + 70);
+                rocketCtx.lineTo(x - 25, y + 22);
+                rocketCtx.lineTo(x - 16, y + 12);
+                rocketCtx.lineTo(x - 16, y);
+                rocketCtx.lineTo(x, y - 16);
+                rocketCtx.lineTo(x + 16, y);
+                rocketCtx.lineTo(x + 16, y + 12);
+                rocketCtx.lineTo(x + 25, y + 22);
+                rocketCtx.lineTo(x + 25, y + 70);
+                rocketCtx.closePath();
+
+                rocketCtx.fillStyle = metalGradient;
+                rocketCtx.fill();
+
+                // КРАСНАЯ ЗВЕЗДА
+                rocketCtx.shadowColor = '#ff0000';
+                rocketCtx.shadowBlur = 16;
+                rocketCtx.beginPath();
+                const spikes = 5;
+                const outerRadius = 11;
+                const innerRadius = 4.5;
+                let rot = Math.PI / 2 * 3;
+                const step = Math.PI / spikes;
+                const starX = x;
+                const starY = y + 16;
+
+                rocketCtx.beginPath();
+                for (let i = 0; i < spikes; i++) {
+                    let angle = i * step * 2 + rot;
+                    rocketCtx.lineTo(starX + Math.cos(angle) * outerRadius, starY + Math.sin(angle) * outerRadius);
+                    angle += step;
+                    rocketCtx.lineTo(starX + Math.cos(angle) * innerRadius, starY + Math.sin(angle) * innerRadius);
+                }
+                rocketCtx.closePath();
+                rocketCtx.fillStyle = '#FF0000';
+                rocketCtx.fill();
+
+                // ИЛЛЮМИНАТОР
+                rocketCtx.shadowColor = '#b87cf7';
+                rocketCtx.shadowBlur = 16;
+                rocketCtx.beginPath();
+                rocketCtx.arc(x, y + 40, 9, 0, 2 * Math.PI);
+                rocketCtx.fillStyle = '#87CEEB';
+                rocketCtx.fill();
+
+                rocketCtx.shadowBlur = 10;
+                rocketCtx.beginPath();
+                rocketCtx.arc(x - 2, y + 38, 3.5, 0, 2 * Math.PI);
+                rocketCtx.fillStyle = '#FFFFFF';
+                rocketCtx.fill();
+
+                // СТАБИЛИЗАТОРЫ
+                rocketCtx.shadowColor = '#40e0d0';
+                rocketCtx.shadowBlur = 16;
+
+                // Левый стабилизатор
+                rocketCtx.beginPath();
+                rocketCtx.moveTo(x - 25, y + 55);
+                rocketCtx.lineTo(x - 36, y + 55);
+                rocketCtx.lineTo(x - 25, y + 38);
+                rocketCtx.closePath();
+                rocketCtx.fillStyle = '#B0B0B0';
+                rocketCtx.fill();
+
+                // Правый стабилизатор
+                rocketCtx.beginPath();
+                rocketCtx.moveTo(x + 25, y + 55);
+                rocketCtx.lineTo(x + 36, y + 55);
+                rocketCtx.lineTo(x + 25, y + 38);
+                rocketCtx.closePath();
+                rocketCtx.fillStyle = '#B0B0B0';
+                rocketCtx.fill();
+
+                // НОСОВОЙ ОБТЕКАТЕЛЬ
+                rocketCtx.shadowColor = '#FFA500';
+                rocketCtx.shadowBlur = 16;
+                rocketCtx.beginPath();
+                rocketCtx.moveTo(x - 9, y - 6);
+                rocketCtx.lineTo(x, y - 19);
+                rocketCtx.lineTo(x + 9, y - 6);
+                rocketCtx.closePath();
+                rocketCtx.fillStyle = '#FF8C00';
+                rocketCtx.fill();
+            }
+
+            function animateRocket() {
+                if (rocketY === undefined) {
+                    rocketY = rocketCanvas.height + 50;
+                }
+                rocketY -= 0.2;
+                if (rocketY < -200) {
+                    rocketY = rocketCanvas.height + 50;
+                }
+                drawRocket();
+                requestAnimationFrame(animateRocket);
+            }
+
+            window.addEventListener('resize', () => {
+                resizeRocketCanvas();
+                drawRocket();
+            });
+            resizeRocketCanvas();
+            animateRocket();
+
+            // --- МЕТЕОРИТ ---
+            const meteorCanvas = document.getElementById('meteor-canvas');
+            const meteorCtx = meteorCanvas.getContext('2d');
+            const PATH_RIGHT_TOP_TO_LEFT_BOTTOM = 0;
+            const PATH_LEFT_TOP_TO_RIGHT_BOTTOM = 1;
+            let meteorPath = PATH_RIGHT_TOP_TO_LEFT_BOTTOM;
+            let meteorX, meteorY;
+            let meteorSpeed = 2.5;
+            let meteorSize = 12;
+            let switchTimer = 0;
+            const SWITCH_INTERVAL = 15000;
+
+            function initMeteorPositions() {
+                meteorX = window.innerWidth + 50;
+                meteorY = -50;
+            }
+
+            function resizeMeteorCanvas() {
+                meteorCanvas.width = window.innerWidth;
+                meteorCanvas.height = window.innerHeight;
+                initMeteorPositions();
+            }
+
+            function switchMeteorPath() {
+                meteorPath = meteorPath === PATH_RIGHT_TOP_TO_LEFT_BOTTOM ? PATH_LEFT_TOP_TO_RIGHT_BOTTOM : PATH_RIGHT_TOP_TO_LEFT_BOTTOM;
+                if (meteorPath === PATH_RIGHT_TOP_TO_LEFT_BOTTOM) {
+                    meteorX = window.innerWidth + 50;
+                    meteorY = -50;
+                } else {
+                    meteorX = -50;
+                    meteorY = -50;
+                }
+                meteorSize = 8 + Math.random() * 10;
+            }
+
+            function updateMeteorPosition() {
+                if (meteorPath === PATH_RIGHT_TOP_TO_LEFT_BOTTOM) {
+                    meteorX -= meteorSpeed * Math.cos(Math.PI / 3.5);
+                    meteorY += meteorSpeed * Math.sin(Math.PI / 3.5);
+                    if (meteorX < -100 || meteorY > meteorCanvas.height + 100) {
+                        meteorX = meteorCanvas.width + 50;
+                        meteorY = -50;
+                        meteorSize = 8 + Math.random() * 10;
+                    }
+                } else {
+                    meteorX += meteorSpeed * Math.cos(Math.PI / 3.5);
+                    meteorY += meteorSpeed * Math.sin(Math.PI / 3.5);
+                    if (meteorX > meteorCanvas.width + 100 || meteorY > meteorCanvas.height + 100) {
+                        meteorX = -50;
+                        meteorY = -50;
+                        meteorSize = 8 + Math.random() * 10;
+                    }
+                }
+            }
+
+            function drawMeteor() {
+                meteorCtx.clearRect(0, 0, meteorCanvas.width, meteorCanvas.height);
+                // ХВОСТ
+                for (let i = 0; i < 12; i++) {
+                    let tailX, tailY;
+                    if (meteorPath === PATH_RIGHT_TOP_TO_LEFT_BOTTOM) {
+                        tailX = meteorX + i * 8 * Math.cos(Math.PI / 3.5 + 0.2);
+                        tailY = meteorY - i * 8 * Math.sin(Math.PI / 3.5 + 0.2);
+                    } else {
+                        tailX = meteorX - i * 8 * Math.cos(Math.PI / 3.5 + 0.2);
+                        tailY = meteorY - i * 8 * Math.sin(Math.PI / 3.5 + 0.2);
+                    }
+                    const tailSize = meteorSize * (1 - i / 15);
+                    const opacity = 0.5 * (1 - i / 15);
+                    meteorCtx.beginPath();
+                    meteorCtx.arc(tailX, tailY, tailSize * 0.8, 0, Math.PI * 2);
+                    const tailGradient = meteorCtx.createRadialGradient(tailX, tailY, 0, tailX, tailY, tailSize);
+                    tailGradient.addColorStop(0, `rgba(255, 100, 0, ${opacity})`);
+                    tailGradient.addColorStop(0.5, `rgba(255, 50, 0, ${opacity * 0.5})`);
+                    tailGradient.addColorStop(1, `rgba(255, 0, 0, 0)`);
+                    meteorCtx.fillStyle = tailGradient;
+                    meteorCtx.shadowColor = '#FF6600';
+                    meteorCtx.shadowBlur = 20;
+                    meteorCtx.fill();
+                }
+                // ЯДРО
+                meteorCtx.shadowColor = '#FF3300';
+                meteorCtx.shadowBlur = 30;
+                meteorCtx.beginPath();
+                meteorCtx.arc(meteorX, meteorY, meteorSize, 0, Math.PI * 2);
+                const meteorGradient = meteorCtx.createRadialGradient(
+                    meteorX - 2, meteorY - 2, 0,
+                    meteorX, meteorY, meteorSize
+                );
+                meteorGradient.addColorStop(0, '#FFFF00');
+                meteorGradient.addColorStop(0.4, '#FF6600');
+                meteorGradient.addColorStop(0.8, '#CC3300');
+                meteorGradient.addColorStop(1, '#882200');
+                meteorCtx.fillStyle = meteorGradient;
+                meteorCtx.fill();
+                // ИСКРЫ
+                for (let i = 0; i < 5; i++) {
+                    const sparkX = meteorX + (Math.random() - 0.5) * meteorSize * 3;
+                    const sparkY = meteorY + (Math.random() - 0.5) * meteorSize * 3;
+                    meteorCtx.beginPath();
+                    meteorCtx.arc(sparkX, sparkY, 2 + Math.random() * 3, 0, Math.PI * 2);
+                    meteorCtx.fillStyle = `rgba(255, ${100 + Math.random() * 100}, 0, ${0.3 + Math.random() * 0.5})`;
+                    meteorCtx.fill();
+                }
+            }
+
+            function animateMeteor() {
+                switchTimer += 16;
+                if (switchTimer >= SWITCH_INTERVAL) {
+                    switchMeteorPath();
+                    switchTimer = 0;
+                }
+                updateMeteorPosition();
+                drawMeteor();
+                requestAnimationFrame(animateMeteor);
+            }
+
+            window.addEventListener('resize', () => {
+                resizeMeteorCanvas();
+            });
+            resizeMeteorCanvas();
+            animateMeteor();
+
+            // --- ПАДАЮЩАЯ ЗВЕЗДА (отдельная) ---
+            const starCanvas = document.getElementById('star-canvas');
+            const starCtx = starCanvas.getContext('2d');
+            let starPath = PATH_LEFT_TOP_TO_RIGHT_BOTTOM;
+            let starX, starY;
+            let starSpeed = 3;
+            let starSize = 10;
+            let starSwitchTimer = 0;
+            
+            function initStarPositions() {
+                starX = -50;
+                starY = -50;
+            }
+            
+            function resizeStarCanvas() {
+                starCanvas.width = window.innerWidth;
+                starCanvas.height = window.innerHeight;
+                initStarPositions();
+            }
+            
+            function switchStarPath() {
+                starPath = starPath === PATH_LEFT_TOP_TO_RIGHT_BOTTOM ? PATH_RIGHT_TOP_TO_LEFT_BOTTOM : PATH_LEFT_TOP_TO_RIGHT_BOTTOM;
+                if (starPath === PATH_LEFT_TOP_TO_RIGHT_BOTTOM) {
+                    starX = -50;
+                    starY = -50;
+                } else {
+                    starX = window.innerWidth + 50;
+                    starY = -50;
+                }
+                starSize = 8 + Math.random() * 8;
+                starSpeed = 2 + Math.random() * 3;
+            }
+            
+            function updateStarPosition() {
+                if (starPath === PATH_LEFT_TOP_TO_RIGHT_BOTTOM) {
+                    starX += starSpeed * Math.cos(Math.PI / 3.5);
+                    starY += starSpeed * Math.sin(Math.PI / 3.5);
+                    if (starX > starCanvas.width + 100 || starY > starCanvas.height + 100) {
+                        starX = -50;
+                        starY = -50;
+                        starSize = 8 + Math.random() * 8;
+                        starSpeed = 2 + Math.random() * 3;
+                    }
+                } else {
+                    starX -= starSpeed * Math.cos(Math.PI / 3.5);
+                    starY += starSpeed * Math.sin(Math.PI / 3.5);
+                    if (starX < -100 || starY > starCanvas.height + 100) {
+                        starX = starCanvas.width + 50;
+                        starY = -50;
+                        starSize = 8 + Math.random() * 8;
+                        starSpeed = 2 + Math.random() * 3;
+                    }
+                }
+            }
+            
+                function drawStar() {
+                starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+                
+                // Цвета для звёздочек
+                const colors = [
+                    { main: '#40e0d0', tail: '#40e0d0' },    // голубой
+                    { main: '#b87cf7', tail: '#b87cf7' },    // лавандовый  
+                    { main: '#ffd966', tail: '#ffaa00' }     // жёлтый
+                ];
+                const colorIndex = Math.floor(Date.now() / 3000) % colors.length;
+                const starColor = colors[colorIndex];
+                
+                // Разная длина хвоста для каждой звезды (меняется каждые 3 секунды)
+                const tailLength = 80 + Math.sin(Date.now() * 0.003) * 35;
+                
+                // ХВОСТ ЗВЕЗДЫ - делаем его мерцающим и разной длины
+                for (let i = 0; i < 12; i++) {
+                    let tailX, tailY;
+                    if (starPath === PATH_LEFT_TOP_TO_RIGHT_BOTTOM) {
+                        tailX = starX - i * (tailLength / 15) * Math.cos(Math.PI / 3.5 - 0.1);
+                        tailY = starY - i * (tailLength / 15) * Math.sin(Math.PI / 3.5 - 0.1);
+                    } else {
+                        tailX = starX + i * (tailLength / 15) * Math.cos(Math.PI / 3.5 - 0.1);
+                        tailY = starY - i * (tailLength / 15) * Math.sin(Math.PI / 3.5 - 0.1);
+                    }
+                    const tailSize = starSize * (1 - i / 18) * 1.2;
+                    const opacity = 0.6 * (1 - i / 15);
+                    
+                    starCtx.beginPath();
+                    starCtx.arc(tailX, tailY, tailSize * 0.4, 0, Math.PI * 2);
+                    
+                    const tailGradient = starCtx.createRadialGradient(tailX, tailY, 0, tailX, tailY, tailSize);
+                    tailGradient.addColorStop(0, starColor.tail + 'ff');
+                    tailGradient.addColorStop(0.5, starColor.tail + '80');
+                    tailGradient.addColorStop(1, starColor.tail + '00');
+                    
+                    starCtx.fillStyle = tailGradient;
+                    starCtx.shadowColor = starColor.tail;
+                    starCtx.shadowBlur = 15;
+                    starCtx.fill();
+                }
+                
+                // ЯДРО ЗВЕЗДЫ - рисуем настоящую звёздочку, а не шарик
+                starCtx.shadowColor = starColor.main;
+                starCtx.shadowBlur = 25;
+                
+                // Рисуем звезду с 5 лучами
+                const spikes = 5;
+                const outerRadius = starSize * 1.2;
+                const innerRadius = starSize * 0.5;
+                const rotation = Date.now() * 0.002; // медленное вращение
+                
+                starCtx.beginPath();
+                for (let i = 0; i < spikes * 2; i++) {
+                    const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                    const angle = (Math.PI / spikes) * i + rotation;
+                    const x = starX + Math.cos(angle) * radius;
+                    const y = starY + Math.sin(angle) * radius;
+                    if (i === 0) starCtx.moveTo(x, y);
+                    else starCtx.lineTo(x, y);
+                }
+                starCtx.closePath();
+                
+                // Градиент для звезды
+                const starGradient = starCtx.createRadialGradient(
+                    starX - 3, starY - 3, 0,
+                    starX, starY, starSize * 1.5
+                );
+                starGradient.addColorStop(0, '#FFFFFF');
+                starGradient.addColorStop(0.3, starColor.main);
+                starGradient.addColorStop(0.8, starColor.main);
+                starGradient.addColorStop(1, starColor.tail);
+                
+                starCtx.fillStyle = starGradient;
+                starCtx.fill();
+                
+                // Добавляем маленькое ядро для сияния
+                starCtx.beginPath();
+                starCtx.arc(starX, starY, starSize * 0.3, 0, Math.PI * 2);
+                starCtx.fillStyle = '#FFFFFF';
+                starCtx.shadowBlur = 20;
+                starCtx.fill();
+            }
+
+            
+            
+
+
+            function animateStar() {
+                starSwitchTimer += 16;
+                if (starSwitchTimer >= SWITCH_INTERVAL) {
+                    switchStarPath();
+                    starSwitchTimer = 0;
+                }
+                updateStarPosition();
+                drawStar();
+                requestAnimationFrame(animateStar);
+            }
+            
+            window.addEventListener('resize', () => {
+                resizeStarCanvas();
+            });
+            resizeStarCanvas();
+            animateStar();
+
+
+            // --- КОМЕТЫ (падающие) ---
+            const cometCanvas = document.getElementById('comet-canvas');
+            const cometCtx = cometCanvas.getContext('2d');
+            let comets = [];
+
+            function resizeCometCanvas() {
+                cometCanvas.width = window.innerWidth;
+                cometCanvas.height = window.innerHeight;
+            }
+
+            function createComet() {
+                return {
+                    x: Math.random() * cometCanvas.width,
+                    y: Math.random() * cometCanvas.height * 0.2 - 50,
+                    length: 50 + Math.random() * 100,
+                    speed: 5 + Math.random() * 10,
+                    angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+                    color: `hsl(${Math.random() * 60 + 180}, 80%, 70%)`,
+                    size: 1 + Math.random() * 2,
+                    life: 1.0
+                };
+            }
+
+            function updateComets() {
+                if (Math.random() < 0.02 && comets.length < 8) {
+                    comets.push(createComet());
+                }
+
+                for (let i = comets.length - 1; i >= 0; i--) {
+                    const c = comets[i];
+                    c.x += Math.cos(c.angle) * c.speed;
+                    c.y += Math.sin(c.angle) * c.speed;
+                    c.life -= 0.002;
+
+                    if (c.y > cometCanvas.height + 100 || c.x > cometCanvas.width + 100 || c.x < -100 || c.life <= 0) {
+                        comets.splice(i, 1);
+                    }
+                }
+            }
+
+            
+                        function drawComets() {
+                cometCtx.clearRect(0, 0, cometCanvas.width, cometCanvas.height);
+                
+                // Цвета для комет-звёздочек
+                const colors = [
+                    { main: '#40e0d0', tail: '#40e0d0' },    // голубой
+                    { main: '#b87cf7', tail: '#b87cf7' },    // лавандовый  
+                    { main: '#ffd966', tail: '#ffaa00' }     // жёлтый
+                ];
+                
+                comets.forEach((c, index) => {
+                    // Выбираем цвет в зависимости от индекса кометы
+                    const colorIndex = index % colors.length;
+                    const starColor = colors[colorIndex];
+                    
+                    // Длина хвоста зависит от размера кометы и времени
+                    const tailLength = c.length * (0.8 + Math.sin(Date.now() * 0.005 + index) * 0.2);
+                    
+                    // Рисуем хвост (мерцающий, разной длины)
+                    for (let i = 0; i < 10; i++) {
+                        const tailX = c.x - Math.cos(c.angle) * (tailLength * i / 8);
+                        const tailY = c.y - Math.sin(c.angle) * (tailLength * i / 8);
+                        const tailSize = c.size * (1.5 - i / 10) * 1.2;
+                        const opacity = 0.6 * (1 - i / 12) * c.life;
+                        
+                        cometCtx.beginPath();
+                        cometCtx.arc(tailX, tailY, tailSize, 0, Math.PI * 2);
+                        
+                        const tailGradient = cometCtx.createRadialGradient(tailX, tailY, 0, tailX, tailY, tailSize * 2);
+                        tailGradient.addColorStop(0, starColor.tail);
+                        tailGradient.addColorStop(0.5, starColor.tail);
+                        tailGradient.addColorStop(1, 'transparent');
+                        
+                        cometCtx.fillStyle = tailGradient;
+                        cometCtx.globalAlpha = opacity;
+                        cometCtx.shadowColor = starColor.tail;
+                        cometCtx.shadowBlur = 15;
+                        cometCtx.fill();
+                    }
+                    
+                    // Рисуем ядро - настоящую звёздочку, а не шарик
+                    cometCtx.globalAlpha = c.life;
+                    cometCtx.shadowColor = starColor.main;
+                    cometCtx.shadowBlur = 25;
+                    
+                    // Звезда с 5 лучами
+                    const spikes = 5;
+                    const outerRadius = c.size * 2.2;
+                    const innerRadius = c.size * 1.1;
+                    const rotation = Date.now() * 0.003 + index; // разное вращение для каждой
+                    
+                    cometCtx.beginPath();
+                    for (let i = 0; i < spikes * 2; i++) {
+                        const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                        const angle = (Math.PI / spikes) * i + rotation;
+                        const x = c.x + Math.cos(angle) * radius;
+                        const y = c.y + Math.sin(angle) * radius;
+                        if (i === 0) cometCtx.moveTo(x, y);
+                        else cometCtx.lineTo(x, y);
+                    }
+                    cometCtx.closePath();
+                    
+                    // Градиент для звезды
+                    const starGradient = cometCtx.createRadialGradient(
+                        c.x - 3, c.y - 3, 0,
+                        c.x, c.y, c.size * 3
+                    );
+                    starGradient.addColorStop(0, '#FFFFFF');
+                    starGradient.addColorStop(0.4, starColor.main);
+                    starGradient.addColorStop(1, starColor.tail);
+                    
+                    cometCtx.fillStyle = starGradient;
+                    cometCtx.fill();
+                    
+                    // Маленькое яркое ядро
+                    cometCtx.beginPath();
+                    cometCtx.arc(c.x, c.y, c.size * 0.8, 0, Math.PI * 2);
+                    cometCtx.fillStyle = '#FFFFFF';
+                    cometCtx.shadowBlur = 20;
+                    cometCtx.fill();
+                    
+                    cometCtx.globalAlpha = 1.0;
+                });
+            }
+
+
+            function animateComets() {
+                updateComets();
+                drawComets();
+                requestAnimationFrame(animateComets);
+            }
+
+            window.addEventListener('resize', resizeCometCanvas);
+            resizeCometCanvas();
+            animateComets();
+
+            // --- ШЛЕЙФ КУРСОРА ---
+            const cursorCanvas = document.getElementById('cursor-canvas');
+            const cursorCtx = cursorCanvas.getContext('2d');
+            let particles = [];
+            const starColors = ['#E6E0FF', '#D8C9FF', '#C9B6FF', '#40E0D0', '#7FF0E0', '#B0F0E8'];
+
+            class StarParticle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = Math.random() * 8 + 4;
+                    this.speedX = Math.random() * 3 - 1.5;
+                    this.speedY = Math.random() * 3 - 1.5;
+                    this.color = starColors[Math.floor(Math.random() * starColors.length)];
+                    this.life = 100;
+                    this.rotation = Math.random() * Math.PI * 2;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.size > 0.2) this.size -= 0.2;
+                    this.life -= 2;
+                    this.rotation += 0.05;
+                }
+                draw() {
+                    cursorCtx.fillStyle = this.color;
+                    cursorCtx.shadowColor = this.color;
+                    cursorCtx.shadowBlur = 10;
+                    cursorCtx.beginPath();
+                    const spikes = 5;
+                    const outerRadius = this.size;
+                    const innerRadius = this.size / 2;
+                    for (let i = 0; i < spikes * 2; i++) {
+                        const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                        const angle = (Math.PI / spikes) * i + this.rotation;
+                        const x = this.x + Math.cos(angle) * radius;
+                        const y = this.y + Math.sin(angle) * radius;
+                        if (i === 0) cursorCtx.moveTo(x, y);
+                        else cursorCtx.lineTo(x, y);
+                    }
+                    cursorCtx.closePath();
+                    cursorCtx.fill();
+                }
+            }
+
+            function resizeCursorCanvas() {
+                cursorCanvas.width = window.innerWidth;
+                cursorCanvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resizeCursorCanvas);
+            resizeCursorCanvas();
+
+            const handleMouseMove = (e) => {
+                for (let i = 0; i < 3; i++) {
+                    particles.push(new StarParticle(e.clientX, e.clientY));
+                }
+            };
+            window.addEventListener('mousemove', handleMouseMove);
+
+            function animateCursor() {
+                cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].life <= 0 || particles[i].size <= 0.3) {
+                        particles.splice(i, 1);
+                        i--;
+                    }
+                }
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            window.addEventListener('beforeunload', () => {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
